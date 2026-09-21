@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Разбор планерки отдела продаж, 18 сентября</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F6F3EC; --surface:#FFFDF8; --ink:#2E221F; --muted:#7A6A64; --line:#E6DED2;
+  --side:#3B2A26; --side-ink:#F3EBE3; --side-muted:#B9A79E;
+  --pink:#C9929A; --violet:#8B7EC8; --blue:#8FA8C8;
+  --ok:#5F9270; --ok-bg:#E4EFE6; --warn:#C8912B; --warn-bg:#F6EAD2; --bad:#B8504F; --bad-bg:#F5DEDC;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#1D1715; --surface:#27201D; --ink:#F1E9E2; --muted:#B3A39B; --line:#3A302C;
+    --side:#140F0E; --side-ink:#F1E9E2; --side-muted:#9C8B83;
+    --ok-bg:#243328; --warn-bg:#3A2F1C; --bad-bg:#3D2322;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#1D1715; --surface:#27201D; --ink:#F1E9E2; --muted:#B3A39B; --line:#3A302C;
+  --side:#140F0E; --side-ink:#F1E9E2; --side-muted:#9C8B83;
+  --ok-bg:#243328; --warn-bg:#3A2F1C; --bad-bg:#3D2322;
+}
+*,*::before,*::after{box-sizing:inherit}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Manrope,"Segoe UI",Roboto,Arial,sans-serif;font-size:15px;line-height:1.55}
+.layout{display:grid;grid-template-columns:250px 1fr;min-height:100%}
+aside{background:var(--side);color:var(--side-ink);padding:28px 20px;position:sticky;top:env(safe-area-inset-top,0px);height:100vh;overflow:auto}
+aside h1{font-size:17px;line-height:1.3;margin:0 0 6px;font-weight:800}
+aside .sub{color:var(--side-muted);font-size:13px;margin:0 0 26px}
+aside nav a{display:block;color:var(--side-ink);text-decoration:none;padding:9px 12px;border-radius:8px;font-size:14px;font-weight:500;margin-bottom:2px}
+aside nav a:hover,aside nav a:focus-visible{background:rgba(255,255,255,.08);outline:none}
+aside nav a.active{background:var(--violet);color:#fff}
+aside .note{margin-top:28px;font-size:12px;color:var(--side-muted);line-height:1.5}
+main{padding:36px 40px 80px;max-width:1120px;width:100%}
+section{margin-bottom:56px}
+h2{font-size:24px;font-weight:800;margin:0 0 6px;letter-spacing:-.01em}
+.lead{color:var(--muted);margin:0 0 22px;max-width:72ch}
+h3{font-size:16px;font-weight:700;margin:0 0 8px}
+p{margin:0 0 10px}
+
+/* hero */
+.hero{display:grid;grid-template-columns:1.25fr 1fr;gap:28px;align-items:stretch;margin-bottom:56px}
+.hero-main{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:30px}
+.hero-main h2{font-size:30px;line-height:1.15;margin-bottom:14px}
+.hero-main p{color:var(--muted);max-width:60ch}
+.fix{background:var(--side);color:var(--side-ink);border-radius:18px;padding:30px;display:flex;flex-direction:column;justify-content:space-between}
+.fix .lbl{font-size:13px;color:var(--side-muted)}
+.fix .nums{display:flex;align-items:baseline;gap:18px;margin:14px 0 10px;flex-wrap:wrap}
+.fix .old{font-size:44px;font-weight:800;text-decoration:line-through;text-decoration-color:var(--pink);text-decoration-thickness:4px;color:var(--side-muted)}
+.fix .new{font-size:64px;font-weight:800;line-height:1;color:#fff}
+.fix p{font-size:14px;color:var(--side-muted);margin:0}
+
+/* scorecard */
+.score{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.sc{background:var(--surface);border:1px solid var(--line);border-left:5px solid var(--c);border-radius:12px;padding:16px 18px}
+.sc .top{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:6px}
+.sc .name{font-weight:700}
+.pill{font-size:12px;font-weight:700;padding:3px 10px;border-radius:999px;background:var(--cb);color:var(--c);white-space:nowrap}
+.sc p{font-size:13.5px;color:var(--muted);margin:0}
+.ok{--c:var(--ok);--cb:var(--ok-bg)} .warn{--c:var(--warn);--cb:var(--warn-bg)} .bad{--c:var(--bad);--cb:var(--bad-bg)}
+
+/* metrics */
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px}
+.big{font-size:32px;font-weight:800;line-height:1.1;margin:4px 0 6px}
+.card .k{font-size:13px;color:var(--muted)}
+.card p{font-size:13.5px;color:var(--muted);margin:0}
+.bar{height:10px;background:var(--line);border-radius:6px;overflow:hidden;margin:10px 0 4px;position:relative}
+.bar i{display:block;height:100%;border-radius:6px}
+.barrow{display:flex;justify-content:space-between;font-size:12px;color:var(--muted)}
+
+/* tables */
+.tw{overflow-x:auto;background:var(--surface);border:1px solid var(--line);border-radius:14px}
+table{border-collapse:collapse;width:100%;min-width:720px;font-size:14px}
+th{text-align:left;font-size:12.5px;color:var(--muted);font-weight:600;padding:12px 14px;border-bottom:1px solid var(--line);background:var(--bg)}
+td{padding:12px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:none}
+.chip{display:inline-block;font-weight:700;font-size:12.5px;padding:2px 9px;border-radius:6px;background:var(--bad-bg);color:var(--bad);margin:0 4px 4px 0}
+.st{font-weight:700;font-size:12.5px;white-space:nowrap}
+.st.ok{color:var(--ok)} .st.warn{color:var(--warn)} .st.bad{color:var(--bad)}
+
+/* two columns */
+.cols{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.list{margin:0;padding:0;list-style:none}
+.list li{padding:12px 0;border-bottom:1px solid var(--line);font-size:14px}
+.list li:last-child{border-bottom:none}
+.list b{display:block;margin-bottom:2px}
+.list span{color:var(--muted)}
+
+/* format */
+.steps{display:grid;grid-template-columns:repeat(5,1fr);gap:10px}
+.step{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px;position:relative}
+.step .n{font-size:13px;font-weight:800;color:var(--violet)}
+.step .t{font-weight:700;margin:4px 0 4px}
+.step .m{font-size:12.5px;color:var(--muted)}
+.five{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.five span{background:var(--surface);border:1px solid var(--violet);color:var(--ink);border-radius:999px;padding:6px 14px;font-size:13.5px;font-weight:600}
+
+.risk{background:var(--warn-bg);border:1px solid var(--warn);border-radius:14px;padding:22px}
+.risk h3{color:var(--ink)}
+.risk p{max-width:75ch}
+
+@media (max-width:980px){
+  .layout{grid-template-columns:1fr}
+  aside{position:sticky;top:0;height:auto;padding:12px 16px calc(12px);padding-top:calc(12px + env(safe-area-inset-top,0px));z-index:5}
+  aside h1,aside .sub,aside .note{display:none}
+  aside nav{display:flex;overflow-x:auto;gap:4px}
+  aside nav a{white-space:nowrap;margin:0}
+  main{padding:24px 18px 60px}
+  .hero,.cols{grid-template-columns:1fr}
+  .grid3{grid-template-columns:1fr}
+  .steps{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+<div class="layout">
+  <aside>
+    <h1>Разбор планерки отдела продаж</h1>
+    <p class="sub">18 сентября 2026, WB и Озон, компрессионные чулки и носки</p>
+    <nav id="nav">
+      <a href="#summary" class="active">Итог</a>
+      <a href="#score">Оценка по блокам</a>
+      <a href="#deficit">Дефицит размеров</a>
+      <a href="#decisions">Решения</a>
+      <a href="#strong">Сильное и мешает</a>
+      <a href="#flow">Ход планерки</a>
+      <a href="#change">Что изменить</a>
+    </nav>
+    <p class="note">Оценка по одной планерке и её записи.</p>
+  </aside>
+
+  <main>
+    <div class="hero" id="summary">
+      <div class="hero-main">
+        <h2>Разбор по артикулам глубокий, но планерка не начинается с разрыва в деньгах и не доводит гипотезы до решений</h2>
+        <p>Менеджеры приходят подготовленными, ведущий проваливается в воронку и тестирует с откатом. Но дефицит размеров обсуждается по кругу в каждом артикуле, общий план/факт не звучит, а в отчёте не хватает маржи в рублях и остатков в разрезе.</p>
+        <p>Планерка идёт около полутора часов, и выводов на это время мало. Команда сама назвала оборачиваемость ключевым показателем планерки. Ниже то, что поможет это реализовать.</p>
+      </div>
+      <div class="fix">
+        <div>
+          <div class="lbl">Разобранных артикулов без ходовых размеров</div>
+          <div class="nums"><span class="new">7</span></div>
+        </div>
+        <p>Почти в каждом артикуле нет S или M. Проблема одна, но на планерке она разбирается по кругу и без оценки потерь в рублях.</p>
+      </div>
+    </div>
+
+    <section id="score">
+      <h2>Оценка по блокам</h2>
+      <p class="lead">Светофор отражает, насколько блок работает на управленческое решение, а не на отчёт.</p>
+      <div class="score">
+        <div class="sc ok"><div class="top"><span class="name">Глубина разбора</span><span class="pill">Работает</span></div><p>Ведущий открывает воронку, двигает период, находит, что оптимизация рекламы сама уронила заказы.</p></div>
+        <div class="sc ok"><div class="top"><span class="name">Тесты и гипотезы</span><span class="pill">Работает</span></div><p>Тест поиска по одному запросу в будни с правилом отката. Цена как рычаг при низком остатке.</p></div>
+        <div class="sc warn"><div class="top"><span class="name">Подготовка менеджеров</span><span class="pill">Частично</span></div><p>Менеджер Озона чётко держит свои метрики и ведёт живой диалог. У WB много контекста, но мало цифр: % плана и маржа почти не звучат.</p></div>
+        <div class="sc bad"><div class="top"><span class="name">Общий план/факт</span><span class="pill">Нет</span></div><p>Итог по кабинету WB не прозвучал. Разрыв к плану месяца в рублях не обсуждался.</p></div>
+        <div class="sc bad"><div class="top"><span class="name">Работа с дефицитом</span><span class="pill">Нет системы</span></div><p>Размеры в ауте почти везде, решение по каждому «оптимизирую рекламу». Корневую причину подняли по вопросу гостя.</p></div>
+        <div class="sc bad"><div class="top"><span class="name">Решения и задачи</span><span class="pill">Не закрываются</span></div><p>Результаты прошлых задач и гипотез не разбираются. Новые «посмотрю, отпишу» не получают ответственного и срок.</p></div>
+        <div class="sc bad"><div class="top"><span class="name">Прозрачность отчёта</span><span class="pill">Искажает</span></div><p>Нет маржи в ₽, остатков и оборачиваемости по FBO/FBS и размерам. Бюджет РК виден только в %.</p></div>
+        <div class="sc bad"><div class="top"><span class="name">Длительность и выводы</span><span class="pill">Затянуто</span></div><p>Около полутора часов, долгие обсуждения отдельных артикулов, экраны открываются вживую, выводов мало.</p></div>
+      </div>
+    </section>
+
+    <section id="deficit">
+      <h2>Дефицит размеров</h2>
+      <p class="lead">Что прозвучало по артикулам. Проблема одна и та же, но каждый раз разбирается отдельно и без оценки потерь в рублях.</p>
+      <div class="tw">
+        <table>
+          <thead><tr><th>Артикул</th><th>Нет размеров</th><th>Что сказали</th><th>Решение</th></tr></thead>
+          <tbody>
+            <tr><td>Чулки 1 класс белые</td><td><span class="chip">S</span></td><td>На ФБО было около 30 шт, идёт приёмка во Владимире</td><td><span class="st warn">Ждём приёмку</span></td></tr>
+            <tr><td>Чулки 1 класс черные</td><td><span class="chip">M</span></td><td>Поставила ФБС Москва, Казань, Краснодар; остаток скоро вылетит</td><td><span class="st warn">Без даты прихода</span></td></tr>
+            <tr><td>Чулки 1 класс, широкое бедро, беж</td><td><span class="chip">S</span></td><td>По складам около 10 шт, в поиск не идём из-за ДРР</td><td><span class="st ok">Тест поиска по 1 запросу в будни</span></td></tr>
+            <tr><td>Носки 1 класс черные</td><td><span class="chip">2 размера</span></td><td>На ФБС 10 шт только в Москве</td><td><span class="st warn">«Оптимизировать ДРР»</span></td></tr>
+            <tr><td>Носки 1 класс беж</td><td><span class="chip">S</span></td><td>Поставки по 10 шт выпали, заказы вернулись вниз</td><td><span class="st warn">Снизить ставку единой</span></td></tr>
+            <tr><td>Чулки 2 класс черные</td><td><span class="chip">M</span></td><td>10 шт на ФБС, «возможно, отключить рекламу»</td><td><span class="st bad">Решение не принято</span></td></tr>
+            <tr><td>Носки 2 класс беж</td><td><span class="chip">S</span><span class="chip">M</span></td><td>Нет давно, работает только единая</td><td><span class="st bad">Не обсуждалось</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="cols" style="margin-top:14px">
+        <div class="card">
+          <h3>Почему это системно</h3>
+          <p>Поставки идут по 10–30 шт на регион. Размер появляется, реклама его разгоняет, через 1–2 дня он заканчивается, ставки режут обратно. Реклама не синхронизирована с покрытием.</p>
+        </div>
+        <div class="card">
+          <h3>Что предлагаем</h3>
+          <p>Отдельный блок «Дефицит» в начале планерки: размер, доля в заказах артикула, потери в ₽ в день, дата прихода, решение (авиа, цена, реклама). Правило: при покрытии ниже порога рекламу не разгоняем, работаем ценой.</p>
+        </div>
+      </div>
+      <div class="card" style="margin-top:14px">
+        <h3>Что стоит отследить</h3>
+        <p style="margin:0">В карточки добавили слайд с подсказкой брать больший размер на границе. Через пару недель полезно посмотреть выкуп и возвраты по XL и 2XL: для компрессионного белья посадка критична, и эти цифры покажут, помогает подсказка или нет.</p>
+      </div>
+    </section>
+
+    <section id="decisions">
+      <h2>Решения</h2>
+      <p class="lead">Что зафиксировали на планерке и что осталось висеть.</p>
+      <div class="cols">
+        <div class="card">
+          <h3>Принято</h3>
+          <ul class="list">
+            <li><b>Сравнить поисковые запросы с конкурентами</b><span>Первая склейка до понедельника, вторая до среды</span></li>
+            <li><b>Тест поиска по одному запросу на широком бедре</b><span>Только в будни, при слабом результате откат</span></li>
+            <li><b>Перенести бюджет РК с M на XL, 2XL без изменений</b><span>Срок оценки не назван</span></li>
+            <li><b>Созвон с Хикматом по авиадоставке 1–2 коробок нужных размеров</b><span>Сегодня после 13:00</span></li>
+            <li><b>Общий созвон с фулфилментом</b><span>Ответственный не назван</span></li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Висит</h3>
+          <ul class="list">
+            <li><b>Отключать ли рекламу на чулках 2 класс черные</b><span>«Посмотрю и отпишу»</span></li>
+            <li><b>Широкое бедро 1 класс белые</b><span>Нашли, что две кампании перебивают ставки, ведущий ушёл, решения нет</span></li>
+            <li><b>Даты поставок на Тихорецкую и Краснодар</b><span>Ответа нет, бронировать не на что</span></li>
+            <li><b>Сколько поедет по широкому бедру 2 класс</b><span>На планерке не знали объём</span></li>
+            <li><b>СПП на XL и 2XL после снижения цены</b><span>«Сегодня посмотрю и отпишу»</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="strong">
+      <h2>Сильное и что мешает</h2>
+      <div class="cols">
+        <div class="card">
+          <h3>Сохранить</h3>
+          <ul class="list">
+            <li><b>Подготовка по артикулу</b><span>Остатки по складам и размерам, типы РК, цены и сроки доставки конкурентов, контент</span></li>
+            <li><b>Менеджер Озона</b><span>Отвечает чётко по своим метрикам: заказы, ДРР от выручки и от заказов, динамика цены и СПП. Не уходит в воду, не плавает в данных, диалог с ведущим идёт активно. Хороший эталон для остальных</span></li>
+            <li><b>Задачи и комментарии в системе заранее</b><span>Действия привязаны к датам в воронке и РНП</span></li>
+            <li><b>Ведущий признаёт ошибки команды</b><span>«Сами себе навредили оптимизацией» — честный разбор без поиска виноватых</span></li>
+            <li><b>Цена как рычаг при дефиците</b><span>Носки 2 класс черные: цену поднимают постепенно, СПП держит цену для покупателя, заказы стабильны</span></li>
+            <li><b>Защита рейтинга</b><span>Белые 2 класс выделяют в отдельную склейку, чтобы не опуститься до 4,7</span></li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Мешает</h3>
+          <ul class="list">
+            <li><b>Нет общего блока</b><span>Сразу артикулы, без плана/факта в ₽ и марже</span></li>
+            <li><b>Дефицит как данность</b><span>Корневую причину и авиадоставку подняли только после вопроса гостя</span></li>
+            <li><b>Нет разбора прошлых задач</b><span>Что делали с артикулом с прошлого созвона и с каким результатом, не звучит</span></li>
+            <li><b>Гипотеза без решения</b><span>«Возможно, стоит отключить» не превращается в «делаем до такого-то числа»</span></li>
+            <li><b>Неравная подготовка</b><span>На WB много контекста, но мало цифр. На Озоне по одному артикулу не было объёма в отгрузке</span></li>
+            <li><b>Две кампании на один артикул</b><span>Поиск и «поиск + рекомендации» конкурируют за ставку</span></li>
+            <li><b>Техника съедает время</b><span>Связь, переподключения, зависший дашборд</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="flow">
+      <h2>Ход планерки</h2>
+      <p class="lead">Планерка началась в 9:30, через полтора часа разбор ещё шёл. Время уходило не на решения, а на сам поиск информации.</p>
+      <div class="cols">
+        <div class="card">
+          <h3>Куда уходило время</h3>
+          <ul class="list">
+            <li><b>Долгий разбор отдельных артикулов</b><span>Обсуждение одного артикула затягивается, но без опоры на оборачиваемость и остатки в цифрах</span></li>
+            <li><b>Выбитые размеры по кругу</b><span>Одна и та же проблема повторяется почти в каждом артикуле, каждый раз с нуля</span></li>
+            <li><b>Поиск данных вживую</b><span>Переключение страниц, открытие показов, воронки и сравнения карточек прямо на созвоне</span></li>
+            <li><b>Технические паузы</b><span>Лаги связи, переподключения, зависший дашборд</span></li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Что получилось на выходе</h3>
+          <ul class="list">
+            <li><b>Мало выводов на объём обсуждения</b><span>Большая часть разговора заканчивается «посмотрю», «отпишу», «понаблюдаем»</span></li>
+            <li><b>Не звучат результаты прошлых задач</b><span>Какие гипотезы проверяли по артикулу на прошлых созвонах, что сделали и что это дало, не обговаривалось</span></li>
+            <li><b>Нет итога по кабинету</b><span>Непонятно, где команда относительно плана месяца и что это значит для решений</span></li>
+            <li><b>Ключевое решение пришло из вопроса гостя</b><span>Идея привезти нужные размеры авиадоставкой появилась не из разбора, а из вопроса со стороны</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="change">
+      <h2>Что изменить</h2>
+      <p class="lead">Не новый регламент, а несколько принципов, которые сократят планерку и дадут больше выводов.</p>
+      <div class="cols">
+        <div class="card">
+          <h3>Идти от общего к частному</h3>
+          <p>Сначала итог по кабинету: план, прогноз, маржа, дефицит. Потом только те артикулы, которые выбиваются из плана. Артикулы в плане не разбираем.</p>
+        </div>
+        <div class="card">
+          <h3>Готовить до планерки, а не на ней</h3>
+          <p>Срез данных и вывод по каждому проблемному артикулу готовы к началу созвона. На планерке экраны не ищем, а обсуждаем, что делать.</p>
+        </div>
+        <div class="card">
+          <h3>Каждый артикул заканчивается решением</h3>
+          <p>Делаем или не делаем, кто и до какого числа. Если данных не хватает, это тоже решение: кто принесёт и когда.</p>
+        </div>
+        <div class="card">
+          <h3>Начинать с результатов прошлых задач</h3>
+          <p>У менеджера по каждому блоку готов отчёт: какие гипотезы проверяли с прошлого созвона, что сделали и какой получили результат. Без этого не видно, что работает, и одни и те же идеи обсуждаются заново.</p>
+        </div>
+        <div class="card">
+          <h3>Дефицит одним блоком</h3>
+          <p>Выбитые размеры по всем артикулам обсуждаются один раз в начале, а не повторяются в каждом разборе.</p>
+        </div>
+      </div>
+      <div class="card" style="margin-top:14px">
+        <h3>Что менеджер готовит по каждому артикулу</h3>
+        <div class="five"><span>% плана по заказам</span><span>Маржа в ₽</span><span>Остаток и покрытие по размерам</span><span>ДРР</span><span>Дата ближайшего прихода</span></div>
+        <h3 style="margin-top:20px">Что добавить в отчёт</h3>
+        <p>Маржу в ₽ рядом с %, с проверкой, что план и факт считаются на одной базе (от заказов или от выкупов), остатки и оборачиваемость по FBO/FBS и размерам с целевым значением, долю заказов с рекламы, счётчик открытых и закрытых задач.</p>
+      </div>
+    </section>
+  </main>
+</div>
+<script>
+(function(){
+  var links=[].slice.call(document.querySelectorAll('#nav a'));
+  var ids=links.map(function(a){return a.getAttribute('href').slice(1)});
+  function onScroll(){
+    var cur=ids[0];
+    ids.forEach(function(id){var el=document.getElementById(id); if(el && el.getBoundingClientRect().top<140) cur=id;});
+    links.forEach(function(a){a.classList.toggle('active',a.getAttribute('href')==='#'+cur)});
+  }
+  window.addEventListener('scroll',onScroll,{passive:true}); onScroll();
+})();
+</script>
+</body>
+</html>
